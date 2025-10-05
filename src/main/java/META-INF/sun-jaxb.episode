@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" if-exists="true" version="2.1">
+  <!--
+
+Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.0 
+Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
+Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
+Generado el: 2025.10.03 a las 04:07:08 PM COT 
+
+  -->
+  <bindings xmlns:tns="http://tempuri.org/" if-exists="true" scd="x-schema::tns">
+    <schemaBindings map="false">
+      <package name="pe.movilbus.autoservicio.soap.wsdl"/>
+    </schemaBindings>
+    <bindings if-exists="true" scd="tns:setVenta">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetVenta"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setVentaResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetVentaResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setNota2">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetNota2"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setNota2Response">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetNota2Response"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setNota">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetNota"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setNotaResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetNotaResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setBajas">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetBajas"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setBajasResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetBajasResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setResumenes">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetResumenes"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setResumenesResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetResumenesResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setUpdateStatusCDR">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetUpdateStatusCDR"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setUpdateStatusCDRResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetUpdateStatusCDRResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setBajaDocumento">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetBajaDocumento"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setBajaDocumentoResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetBajaDocumentoResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setNotaVenta">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetNotaVenta"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setNotaVentaResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetNotaVentaResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setEnviarComprobantesSunat">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetEnviarComprobantesSunat"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setEnviarComprobantesSunatResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetEnviarComprobantesSunatResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:getRepresentacionImpresa">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.GetRepresentacionImpresa"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:getRepresentacionImpresaResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.GetRepresentacionImpresaResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setUpdatePdf">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetUpdatePdf"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setUpdatePdfResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetUpdatePdfResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:buscarDetalleComprobante">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.BuscarDetalleComprobante"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:buscarDetalleComprobanteResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.BuscarDetalleComprobanteResponse"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setConsultarCDR">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetConsultarCDR"/>
+    </bindings>
+    <bindings if-exists="true" scd="tns:setConsultarCDRResponse">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.SetConsultarCDRResponse"/>
+    </bindings>
+  </bindings>
+  <bindings xmlns:tns="http://schemas.datacontract.org/2004/07/FEService.Input" if-exists="true" scd="x-schema::tns">
+    <schemaBindings map="false">
+      <package name="pe.movilbus.autoservicio.soap.wsdl"/>
+    </schemaBindings>
+    <bindings if-exists="true" scd="~tns:Venta">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.Venta"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:Nota">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.Nota"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:DocumentoBaja">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.DocumentoBaja"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:DocumentCDR">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.DocumentCDR"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:Cliente">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.Cliente"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:DocumentoReferencia">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.DocumentoReferencia"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:InformacionAdicional">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.InformacionAdicional"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:ArrayOfInformacionAdicional.PropiedadAdicional">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.ArrayOfInformacionAdicionalPropiedadAdicional"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:InformacionAdicional.PropiedadAdicional">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.InformacionAdicionalPropiedadAdicional"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:ArrayOfInformacionAdicional.TotalMonedaAdicional">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.ArrayOfInformacionAdicionalTotalMonedaAdicional"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:InformacionAdicional.TotalMonedaAdicional">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.InformacionAdicionalTotalMonedaAdicional"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:ArrayOfDetalleCuota">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.ArrayOfDetalleCuota"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:DetalleCuota">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.DetalleCuota"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:ArrayOfDetalleVenta">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.ArrayOfDetalleVenta"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:DetalleVenta">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.DetalleVenta"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:ArrayOfEmpresa">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.ArrayOfEmpresa"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:Empresa">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.Empresa"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:ArrayOfRetencionInp">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.ArrayOfRetencionInp"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:RetencionInp">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.RetencionInp"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:ArrayOfRetencionDetalleInp">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.ArrayOfRetencionDetalleInp"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:RetencionDetalleInp">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.RetencionDetalleInp"/>
+    </bindings>
+  </bindings>
+  <bindings xmlns:tns="http://schemas.datacontract.org/2004/07/FEService.Util" if-exists="true" scd="x-schema::tns">
+    <schemaBindings map="false">
+      <package name="pe.movilbus.autoservicio.soap.wsdl"/>
+    </schemaBindings>
+    <bindings if-exists="true" scd="~tns:Result">
+      <class ref="pe.movilbus.autoservicio.soap.wsdl.Result"/>
+    </bindings>
+  </bindings>
+</bindings>

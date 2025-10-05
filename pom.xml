@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.6.1</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>pe.movilbus</groupId>
+	<artifactId>autoservicio</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>apirest</name>
+	<description>Spring Boot Apirest</description>
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+			
+		<!--  Configuracion de Base de datos -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        		
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.8</version>
+		</dependency>
+		
+		
+		 <dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.9</version>
+		</dependency>
+		
+		<!-- Axis2 -->
+		 <dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-kernel</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.5.3</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20220924</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+        
+        <dependency>
+	    	<groupId>org.jasypt</groupId>
+	      	<artifactId>jasypt</artifactId>
+	      	<version>1.9.2</version>
+	    </dependency>
+	    
+	    <dependency>
+			<groupId>org.jasypt</groupId>
+			<artifactId>jasypt-spring31</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		
+		<dependency>
+        	<groupId>com.sun.mail</groupId>
+        	<artifactId>javax.mail</artifactId>
+        	<version>1.6.2</version>
+    	</dependency>
+		
+		<dependency>
+		    <groupId>javax.ws.rs</groupId>
+		    <artifactId>javax.ws.rs-api</artifactId>
+		    <version>2.1</version>
+		</dependency>
+		
+		<!--<dependency>
+		   <groupId>org.apache.xmlbeans</groupId>
+		   <artifactId>xmlbeans</artifactId>
+		   <version>2.6.0</version>
+		</dependency>
+				
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.ws</groupId>
+		    <artifactId>spring-ws-core</artifactId>
+		    <version>3.1.1</version>
+		</dependency>-->
+
+	    <dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+
+		
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.14.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaLanguage>WSDL</schemaLanguage>
+                    <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+                    <generatePackage>pe.movilbus.autoservicio.soap.wsdl</generatePackage>
+                    <schemas>
+                        <schema>
+                            <url>http://192.168.10.24:8086/MEFEService.svc?wsdl</url>
+                        </schema>
+                    </schemas>
+                </configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
