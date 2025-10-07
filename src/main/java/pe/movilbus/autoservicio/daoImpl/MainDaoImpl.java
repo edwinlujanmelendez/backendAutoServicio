@@ -147,23 +147,23 @@ public class MainDaoImpl implements MainDao{
 	private static String userpassBase64 = "";
 	
 	//PRD
-	//private static String archivos_temp = "//opt//tomcat9//webapps//backendAutoservicio//archivos_temp//";
-	//private static String archivo_bioseguridad = "//opt//tomcat9//webapps//backendAutoservicio//archivo_bioseguridad//MOVIL BUS - PROTOCOLOS DE VIAJE.pdf";
+	private static String archivos_temp = "//opt//tomcat9//webapps//backendAutoservicio//archivos_temp//";
+	private static String archivo_bioseguridad = "//opt//tomcat9//webapps//backendAutoservicio//archivo_bioseguridad//MOVIL BUS - PROTOCOLOS DE VIAJE.pdf";
 	//DEV
 	//private static String archivos_temp = "//opt//tomcat9//webapps//backendAutoservicioQA//archivos_temp//";
 	//private static String archivo_bioseguridad = "//opt//tomcat9//webapps//backendAutoservicioQA//archivo_bioseguridad//MOVIL BUS - PROTOCOLOS DE VIAJE.pdf";
 	//LOCAL
-	private static String archivos_temp = "D:\\Proyectos MovilBus\\backend_autoservicio\\src\\main\\webapp\\archivos_temp\\";
-	private static String archivo_bioseguridad = "D:\\Proyectos MovilBus\\backend_autoservicio\\src\\main\\webapp\\archivo_bioseguridad\\MOVIL BUS - PROTOCOLOS DE VIAJE.pdf";
+	//private static String archivos_temp = "D:\\Proyectos MovilBus\\backend_autoservicio\\src\\main\\webapp\\archivos_temp\\";
+	//private static String archivo_bioseguridad = "D:\\Proyectos MovilBus\\backend_autoservicio\\src\\main\\webapp\\archivo_bioseguridad\\MOVIL BUS - PROTOCOLOS DE VIAJE.pdf";
 	
 	public static Connection connection(){
 	    Connection conn = null;
 	    try {
 	      OracleDataSource ds = new OracleDataSource();
-	      //ds.setURL("jdbc:oracle:thin:@192.168.10.224:1521:MOVIL");				//PRD SISPAS
-	      //conn = ds.getConnection("pasajes", "movil16");						//PRD SISPAS
-	      ds.setURL("jdbc:oracle:thin:@192.168.10.21:1521:movildev");			//DEV
-	      conn = ds.getConnection("pasajes", "PsjMB$252");					//DEV
+	      ds.setURL("jdbc:oracle:thin:@192.168.10.224:1521:MOVIL");				//PRD SISPAS
+	      conn = ds.getConnection("pasajes", "movil16");						//PRD SISPAS
+	      //ds.setURL("jdbc:oracle:thin:@192.168.10.21:1521:movildev");			//DEV
+	      //conn = ds.getConnection("pasajes", "PsjMB$252");					//DEV
 	      return conn;
 	    } catch (SQLException e) {
 	      e.printStackTrace();
@@ -2120,21 +2120,21 @@ public class MainDaoImpl implements MainDao{
 	private void actualizarTelefonoPasajero(Pasajero pasajero, String telefono){
 		String sqlpasajero = "";
 		
-		if(pasajero.getIdpasajero() != null){
-			sqlpasajero = " SELECT PASAJERO_ID,tipdoc_id,c_numdoc,C_NOMBRE,C_APEPAT,c_apemat,c_fecnac,c_telefono,flag_ws FROM PASAJES.VRMPASAJERO "+
+		if(pasajero.getIdpasajero() != null && pasajero.getIdpasajero().intValue() != 0){
+			sqlpasajero = " SELECT PASAJERO_ID,tipdoc_id,c_numdoc,C_NOMBRE,C_APEPAT,c_apemat,c_fecnac,c_telefono,c_email,sexo_id,flag_ws FROM PASAJES.VRMPASAJERO "+
   				  		   " WHERE PASAJERO_ID="+pasajero.getIdpasajero();
 		}else{ 
-			sqlpasajero = " SELECT PASAJERO_ID,tipdoc_id,c_numdoc,C_NOMBRE,C_APEPAT,c_apemat,c_fecnac,c_telefono,flag_ws FROM PASAJES.VRMPASAJERO "+
+			sqlpasajero = " SELECT PASAJERO_ID,tipdoc_id,c_numdoc,C_NOMBRE,C_APEPAT,c_apemat,c_fecnac,c_telefono,c_email,sexo_id,flag_ws FROM PASAJES.VRMPASAJERO "+
             				" WHERE TRIM(C_NUMDOC) = '"+pasajero.getNumDocumento()+"' and C_ESTREG ='"+Constantes.ACTIVO+"' and TIPDOC_ID="+pasajero.getIdTipoDocumento();
 		}
 		
 		List<Pasajero> listPasajero = jdbcTemplate.query(sqlpasajero, new PasajeroPr9RowMapper());
 		
 		if(listPasajero.size() > 0) {
-			if(pasajero.getTelefono() == null || pasajero.getTelefono().length() < 9){
-				sqlpasajero = " UPDATE VRMPASAJERO VP SET  C_TELEFONO = '"+telefono+"',"+"AUDUSUMOD ='"+Constantes.USUARIO_INSER_MODIFICACION+"'"+
-						  " WHERE PASAJERO_ID="+listPasajero.get(0).getIdpasajero();
-
+			for(int a=0; a<listPasajero.size(); a++){
+				sqlpasajero = " UPDATE VRMPASAJERO SET  C_TELEFONO = '"+telefono+"',"+"AUDUSUMOD ='"+Constantes.USUARIO_INSER_MODIFICACION+"'"+
+						  " WHERE PASAJERO_ID="+listPasajero.get(a).getIdpasajero();
+	
 				jdbcTemplate.update(sqlpasajero);
 			}
 		}
