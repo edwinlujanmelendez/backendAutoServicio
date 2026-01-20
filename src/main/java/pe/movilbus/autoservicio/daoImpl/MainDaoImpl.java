@@ -1,46 +1,26 @@
 package pe.movilbus.autoservicio.daoImpl;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Locale;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.imageio.ImageIO;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -53,19 +33,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.datacontract.schemas._2004._07.feservice.Venta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-
 import oracle.jdbc.pool.OracleDataSource;
-import pe.movilbus.autoservicio.beans.AgenciaListSispas;
+import pe.movilbus.autoservicio.beans.Agencia;
 import pe.movilbus.autoservicio.beans.AgenciaSispas;
 import pe.movilbus.autoservicio.beans.AsientoOcupado;
 import pe.movilbus.autoservicio.beans.BodyMailFormat;
@@ -75,7 +49,6 @@ import pe.movilbus.autoservicio.beans.CentroCostoSispas;
 import pe.movilbus.autoservicio.beans.Cliente;
 import pe.movilbus.autoservicio.beans.ClienteListSispas;
 import pe.movilbus.autoservicio.beans.ClienteSispas;
-import pe.movilbus.autoservicio.beans.CompaniaListSispas;
 import pe.movilbus.autoservicio.beans.CompaniaSispas;
 import pe.movilbus.autoservicio.beans.ConcesionarioSispas;
 import pe.movilbus.autoservicio.beans.DatoSalidasEmbarque;
@@ -113,21 +86,17 @@ import pe.movilbus.autoservicio.beans.TipoMonedaSispas;
 import pe.movilbus.autoservicio.beans.TipoMovimientoSispas;
 import pe.movilbus.autoservicio.beans.UbigeoSispas;
 import pe.movilbus.autoservicio.beans.UsuarioHardwareSispas;
-import pe.movilbus.autoservicio.beans.UsuarioListSispas;
 import pe.movilbus.autoservicio.beans.UsuarioSispas;
 import pe.movilbus.autoservicio.beans.VentaPasaje;
-import pe.movilbus.autoservicio.beans.VentaPasajeListSispas;
 import pe.movilbus.autoservicio.beans.VentaPasajeSispas;
 import pe.movilbus.autoservicio.beans.VentaPasajeros;
 import pe.movilbus.autoservicio.beans.VentasGeneral;
 import pe.movilbus.autoservicio.dao.MainDao;
 import pe.movilbus.autoservicio.service.fe.VentaPasajeFE;
 import pe.movilbus.autoservicio.service.fe.WSFE2;
-import pe.movilbus.autoservicio.service.xml.XmlVentaPasaje;
 import pe.movilbus.autoservicio.util.Constantes;
 import pe.movilbus.autoservicio.util.Encriptar;
 import pe.movilbus.autoservicio.util.Util;
-import sun.misc.BASE64Encoder;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -160,10 +129,10 @@ public class MainDaoImpl implements MainDao{
 	    Connection conn = null;
 	    try {
 	      OracleDataSource ds = new OracleDataSource();
-	      ds.setURL("jdbc:oracle:thin:@192.168.10.224:1521:MOVIL");				//PRD SISPAS
-	      conn = ds.getConnection("pasajes", "movil16");						//PRD SISPAS
-	      //ds.setURL("jdbc:oracle:thin:@192.168.10.21:1521:movildev");			//DEV
-	      //conn = ds.getConnection("pasajes", "PsjMB$252");					//DEV
+	      ds.setURL("jdbc:oracle:thin:@192.168.10.224:1521:MOVIL");					//PRD SISPAS
+	      conn = ds.getConnection("pasajes", "movil16");							//PRD SISPAS
+	      //ds.setURL("jdbc:oracle:thin:@192.168.10.21:1521:movildev");				//DEV
+	      //conn = ds.getConnection("pasajes", "PsjMB$252");					    //DEV
 	      return conn;
 	    } catch (SQLException e) {
 	      e.printStackTrace();
@@ -193,53 +162,103 @@ public class MainDaoImpl implements MainDao{
 	}
 	
 	@Override
-	public List<DatoSalidasEmbarque> getSalidasEmbarque(int localidad_origen){
+	public List<Agencia> getAgencias(){
+		List<Agencia> lstReportes = new ArrayList<Agencia>();
+		
+		try{
+			String sql = " select agencia_id, tipage_id, localidad_id, concesionario_id, ubigeo_id, zoncom_id, c_denominacion, c_nomcor, n_esterminal, c_codigo, "+
+					 	 " c_direccion, nacionalidad_id, codigo_concar, c_nombre_concar from vrmagencia where c_estreg='A' and concesionario_id=1 order by c_denominacion";
+			
+			lstReportes = jdbcTemplate.query(sql, new AgenciaRowMapper());
+			
+			return lstReportes;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public List<DatoSalidasEmbarque> getSalidasEmbarque(int agenciaIdOrigen){
 		List<DatoSalidasEmbarque> datoSalidasEmbarque = new ArrayList<DatoSalidasEmbarque>();
 		
 		try{
-			int cont = 300;
-	    	
-		    do {
-		        cont += 60;
-				String sql = " SELECT * FROM ( "+
-							 " SELECT i.itinerario_id, b.c_codigo, "+
-							 "   CASE "+
-							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'EJECU' THEN 'EJECUTIVO VIP' "+
-							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'PRESI' THEN 'PRESIDENCIAL' "+
-							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'PREMI' THEN 'PREMIER' "+
-							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'ECONO' THEN 'ECONÓMICO' "+
-							 "   END AS TIPO_SERVICIO, "+
-							 "   r.c_origen origen, ao.c_nomcor age_partida, to_char(di.d_fecpar, 'DD/MM/YYYY') fecha_partida, di.c_horpar, "+
-							 "   r.c_destino destino, ad.c_nomcor age_llegada, to_char(di.d_feclle, 'DD/MM/YYYY') fecha_llegada, di.c_horlle, "+
-							 "   i.c_sectra, "+
-							 "   CASE "+
-							 "     WHEN i.c_desc_escalas IS NULL THEN '-' "+
-							 "     ELSE i.c_desc_escalas "+
-							 "   END AS escalas, "+
-							 " di.d_fecsalida, di.c_horsalida, di.n_puerta, itiagepar.c_horsalida horasalidaagencia, itiagepar.n_puerta puertaagencia "+
-							 " FROM vrtitinerario i "+
-							 " INNER JOIN vrtdetiti di ON di.itinerario_id = i.itinerario_id "+
-							 " LEFT JOIN vrmbus b ON b.bus_id = i.bus_id "+
-							 " INNER JOIN vrmservicio s ON s.servicio_id = i.servicio_id "+
-							 " INNER JOIN vrmruta r ON r.ruta_id = di.ruta_id "+
-							 " INNER JOIN vrmagencia ao ON ao.agencia_id = di.agencia_idpartida "+
-							 " INNER JOIN vrmagencia ad ON ad.agencia_id = di.agencia_idllegada "+
-							 " INNER JOIN vrtitiagepar itiagepar ON itiagepar.itinerario_id = i.itinerario_id and itiagepar.agencia_id = di.agencia_idpartida "+
-							 " WHERE "+
-							 "   r.localidad_idorigen = "+localidad_origen+
-							 "   AND r.c_destino = NVL(NULL, r.c_destino) "+
-							 "   AND s.c_denominacion = NVL(NULL, s.c_denominacion) "+
-							 "   AND i.N_EsAnulado = 0 "+
-							 "   AND i.C_EstReg = 'A' "+
-							 "   AND TO_DATE(TO_CHAR(di.d_fecpar,'dd/mm/yyyy') || ' ' || di.c_horpar, 'dd/MM/yyyy hh24:mi:ss') "+
-							 "       BETWEEN SYSDATE - (30/1440) AND SYSDATE + ("+cont+"/1440) "+																//entre 30 minutos antes y 1 hora después
-							 "   AND i.ruta_idmayor = di.ruta_id "+
-							 " ORDER BY di.d_fecpar, TO_DATE(di.c_horpar,'HH24:MI'), di.d_feclle, TO_DATE(di.c_horlle,'HH24:MI') "+
-							" ) "+
-							" WHERE ROWNUM <= 15";
-							
-				datoSalidasEmbarque = jdbcTemplate.query(sql, new DatoSalidasEmbarqueRowMapper());
-		    } while (datoSalidasEmbarque.size() != 15 && cont <= 720);
+//				String sql = " SELECT * FROM ( "+
+//							 " SELECT i.itinerario_id, b.c_codigo, "+
+//							 "   CASE "+
+//							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'EJECU' THEN 'EJECUTIVO VIP' "+
+//							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'PRESI' THEN 'PRESIDENCIAL' "+
+//							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'PREMI' THEN 'PREMIER' "+
+//							 "     WHEN SUBSTR(S.C_DENOMINACION,0,5) = 'ECONO' THEN 'ECONÓMICO' "+
+//							 "   END AS TIPO_SERVICIO, "+
+//							 "   r.c_origen origen, ao.c_nomcor age_partida, to_char(di.d_fecpar, 'DD/MM/YYYY') fecha_partida, di.c_horpar, "+
+//							 "   r.c_destino destino, ad.c_nomcor age_llegada, to_char(di.d_feclle, 'DD/MM/YYYY') fecha_llegada, di.c_horlle, "+
+//							 "   i.c_sectra, "+
+//							 "   CASE "+
+//							 "     WHEN i.c_desc_escalas IS NULL THEN '-' "+
+//							 "     ELSE i.c_desc_escalas "+
+//							 "   END AS escalas, "+
+//							 " di.d_fecsalida, di.c_horsalida, di.n_puerta, itiagepar.c_horsalida horasalidaagencia, itiagepar.n_puerta puertaagencia "+
+//							 " FROM vrtitinerario i "+
+//							 " INNER JOIN vrtdetiti di ON di.itinerario_id = i.itinerario_id "+
+//							 " LEFT JOIN vrmbus b ON b.bus_id = i.bus_id "+
+//							 " INNER JOIN vrmservicio s ON s.servicio_id = i.servicio_id "+
+//							 " INNER JOIN vrmruta r ON r.ruta_id = di.ruta_id "+
+//							 " INNER JOIN vrmagencia ao ON ao.agencia_id = di.agencia_idpartida "+
+//							 " INNER JOIN vrmagencia ad ON ad.agencia_id = di.agencia_idllegada "+
+//							 " INNER JOIN vrtitiagepar itiagepar ON itiagepar.itinerario_id = i.itinerario_id and itiagepar.agencia_id = di.agencia_idpartida "+
+//							 " WHERE "+
+//							 "   r.localidad_idorigen = "+localidad_origen+
+//							 "   AND r.c_destino = NVL(NULL, r.c_destino) "+
+//							 "   AND s.c_denominacion = NVL(NULL, s.c_denominacion) "+
+//							 "   AND i.N_EsAnulado = 0 "+
+//							 "   AND i.C_EstReg = 'A' "+
+//							 "   AND TO_DATE(TO_CHAR(di.d_fecpar,'dd/mm/yyyy') || ' ' || di.c_horpar, 'dd/MM/yyyy hh24:mi:ss') "+
+//							 "       BETWEEN SYSDATE - (6/1440) AND SYSDATE + ("+cont+"/1440) "+																//entre 6 minutos antes y 1 hora después
+//							 "   AND i.ruta_idmayor = di.ruta_id "+
+//							 " ORDER BY di.d_fecpar, TO_DATE(di.c_horpar,'HH24:MI'), di.d_feclle, TO_DATE(di.c_horlle,'HH24:MI') "+
+//							" ) "+
+//							" WHERE ROWNUM <= 8";
+		        
+	        String sql = " select distinct d.agencia_idpartida agencia_id_detalle,d.itinerario_id,agporipartida.agencia_id, "+
+								" sr.c_denominacion as servicio,rt.c_origen as origen,rt.c_destino as destino, "+
+								"  case when agporipartida.agencia_id is null then agpescala.c_denominacion "+
+								"     else agporipartida.c_denominacion     "+
+								" end as agencia_partida, "+
+								" d.d_fecpar as fecha_partida, "+      
+								" case when agporipartida.agencia_id is null then d.c_horpar "+
+								"     else itiapartida.c_horpar     "+
+								" end as hora_partida, d.d_fecsalida, "+
+								" case when agporipartida.agencia_id is null then d.c_horsalida "+
+								"     else itiapartida.c_horsalida "+
+								"  end as hora_salida, "+
+								" case when agporipartida.agencia_id is null then d.n_puerta "+
+								"   else itiapartida.n_puerta "+
+								" end as nro_puerta, "+
+								" CASE WHEN it.c_desc_escalas IS NULL THEN '-' "+
+								" ELSE it.c_desc_escalas "+
+								" END AS c_desc_escalas, "+
+								" b.c_codigo "+
+						" from vrtdetiti d  "+
+						" inner join vrtitinerario it on it.itinerario_id = d.itinerario_id AND it.n_esanulado="+Constantes.FALSE_VALUE+
+						" inner join vrmruta rt on rt.ruta_id = it.ruta_idmayor "+
+						" inner join vrmservicio sr on sr.servicio_id = it.servicio_id "+
+						" inner join vrmagencia agpescala on agpescala.agencia_id = d.agencia_idpartida "+
+						" inner join vrmagencia aglescala on aglescala.agencia_id = d.agencia_idllegada "+
+						" left join vrtitiagepar itiapartida on itiapartida.itinerario_id = it.itinerario_id "+
+						" left join vrmagencia agporipartida on agporipartida.agencia_id = itiapartida.agencia_id and agporipartida.localidad_id = agpescala.localidad_id "+
+						" LEFT JOIN vrmbus b ON b.bus_id = it.bus_id "+
+						" where it.c_sectra like '%'||agpescala.localidad_id||'-'||aglescala.localidad_id||'-'||'%' "+
+						" and TRUNC(d.d_fecpar) = TRUNC(SYSDATE) "+
+						"   and TO_DATE( "+
+			            "         case when agporipartida.agencia_id is null then d.c_horpar "+
+			            "              else itiapartida.c_horpar "+
+			            "         end, 'HH24:MI') > TO_DATE(TO_CHAR(SYSDATE - INTERVAL '6' MINUTE,'HH24:MI'),'HH24:MI') "+
+						" and NVL(agporipartida.agencia_id,agpescala.agencia_id) = "+agenciaIdOrigen+
+						" order by hora_partida";
+			
+			datoSalidasEmbarque = jdbcTemplate.query(sql, new DatoSalidasEmbarqueRowMapper());
 			
 			return datoSalidasEmbarque;
 		}catch(Exception e){
@@ -248,7 +267,6 @@ public class MainDaoImpl implements MainDao{
 		
 		return datoSalidasEmbarque;
 	}
-	
 	
 	@Override
 	public List<DatoTarifario> getTarifario(String rutas_id){
@@ -312,7 +330,7 @@ public class MainDaoImpl implements MainDao{
 						 " )) > 0 "+
 						 " ORDER BY di.d_fecpar, TO_DATE(di.c_horpar,'HH24:MI'), di.d_feclle, TO_DATE(di.c_horlle,'HH24:MI') "+
 						" ) "+
-						" WHERE ROWNUM <= 15";
+						" WHERE ROWNUM <= 8";
 			
 			datoTarifario = jdbcTemplate.query(sql, new DatoTarifarioRowMapper());
 			
@@ -602,7 +620,7 @@ public class MainDaoImpl implements MainDao{
 						 " where vmage.localidad_id="+idAgencia+" and vmage.n_esterminal=1 and vmusu.c_codigo='AUTOSERVI.'";
 			
 			List<String> ltsUsuarios = jdbcTemplate.query(sql, new StringRowMapper());
-			
+			System.out.println("Cantidad usuarios: " + ltsUsuarios.size());
 			return ltsUsuarios;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -2128,7 +2146,7 @@ public class MainDaoImpl implements MainDao{
             				" WHERE TRIM(C_NUMDOC) = '"+pasajero.getNumDocumento()+"' and C_ESTREG ='"+Constantes.ACTIVO+"' and TIPDOC_ID="+pasajero.getIdTipoDocumento();
 		}
 		
-		List<Pasajero> listPasajero = jdbcTemplate.query(sqlpasajero, new PasajeroPr9RowMapper());
+		List<Pasajero> listPasajero = jdbcTemplate.query(sqlpasajero, new PasajeroPr11RowMapper());
 		
 		if(listPasajero.size() > 0) {
 			for(int a=0; a<listPasajero.size(); a++){
@@ -2314,6 +2332,14 @@ public class MainDaoImpl implements MainDao{
 		}
 	}
 	
+	private final class PasajeroPr11RowMapper implements RowMapper<Pasajero>{
+		
+		@Override
+		public Pasajero mapRow(ResultSet rs, int rowNum) throws SQLException {			
+			return new Pasajero(rs.getBigDecimal(1),rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),rs.getString(6) ,rs.getString(7) , rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11));
+		}
+	}
+	
 	private final class StringRowMapper implements RowMapper<String> {
 		
 		@Override
@@ -2359,8 +2385,8 @@ public class MainDaoImpl implements MainDao{
 		
 		@Override
 		public DatoSalidasEmbarque mapRow(ResultSet rs, int rowNum) throws SQLException {
-			return new DatoSalidasEmbarque(rs.getBigDecimal(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), 
-					rs.getString(11), rs.getString(12), rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17), rs.getString(18));
+			return new DatoSalidasEmbarque(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), 
+					rs.getString(11), rs.getString(12), rs.getString(13), rs.getString(14));
 		}
 	}
 	
@@ -2388,6 +2414,15 @@ public class MainDaoImpl implements MainDao{
 		@Override
 		public Liquidacion mapRow(ResultSet rs, int rowNum) throws SQLException {
 			return new Liquidacion(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getDate(6), rs.getString(7), rs.getInt(8), rs.getInt(9));
+		}
+	}
+	
+	private final class AgenciaRowMapper implements RowMapper<Agencia> {
+		
+		@Override
+		public Agencia mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return new Agencia(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getInt(10), rs.getString(11),
+					rs.getInt(12), rs.getInt(13), rs.getString(14));
 		}
 	}
 }

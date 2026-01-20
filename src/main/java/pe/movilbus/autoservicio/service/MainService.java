@@ -2,6 +2,7 @@ package pe.movilbus.autoservicio.service;
 
 import java.util.List;
 
+import pe.movilbus.autoservicio.beans.Agencia;
 import pe.movilbus.autoservicio.beans.BodyPdfCorreo;
 import pe.movilbus.autoservicio.beans.DatoSalidasEmbarque;
 import pe.movilbus.autoservicio.beans.DatoTarifario;
@@ -17,11 +18,13 @@ public interface MainService {
 	
 	public String consumirServicio();
 	
+	public List<Agencia> getAgencias();
+	
 	public List<String> getUsuariosSispas(int idAgencia);
 	
 	public int validarUsuarioSispas(String usuario, String password);
 	
-	public List<DatoSalidasEmbarque> getSalidasEmbarque(int localidad_origen);
+	public List<DatoSalidasEmbarque> getSalidasEmbarque(int agenciaIdOrigen);
 	
 	public List<DatoTarifario> getTarifario(String rutas_id);
 	

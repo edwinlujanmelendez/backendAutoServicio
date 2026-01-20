@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pe.movilbus.autoservicio.beans.Agencia;
 import pe.movilbus.autoservicio.beans.BodyPdfCorreo;
 import pe.movilbus.autoservicio.beans.DatoSalidasEmbarque;
 import pe.movilbus.autoservicio.beans.DatoTarifario;
@@ -37,6 +38,11 @@ public class MainRestController {
 	public String consumirServicio(){
 		//return "sirve";
 		return mainService.consumirServicio();
+	}
+	
+	@GetMapping("/getAgencias")
+	public List<Agencia> getAgencias(){
+		return mainService.getAgencias();
 	}
 	
 	@GetMapping("/getUsuariosSispas/{idAgencia}")

@@ -64,8 +64,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
+//import com.google.zxing.common.BitMatrix;
+//import com.google.zxing.qrcode.QRCodeWriter;
 
 import pe.movilbus.autoservicio.beans.AgenciaSispas;
 import pe.movilbus.autoservicio.beans.CompaniaSispas;

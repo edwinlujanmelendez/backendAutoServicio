@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pe.movilbus.autoservicio.beans.Agencia;
 import pe.movilbus.autoservicio.beans.BodyPdfCorreo;
 import pe.movilbus.autoservicio.beans.DatoSalidasEmbarque;
 import pe.movilbus.autoservicio.beans.DatoTarifario;
@@ -33,6 +34,11 @@ public class MainServiceImpl implements MainService{
 	}
 	
 	@Override
+	public List<Agencia> getAgencias(){
+		return mainDao.getAgencias();
+	}
+	
+	@Override
 	public List<String> getUsuariosSispas(int idAgencia){
 		return mainDao.getUsuariosSispas(idAgencia);
 	}
@@ -43,8 +49,8 @@ public class MainServiceImpl implements MainService{
 	}
 	
 	@Override
-	public List<DatoSalidasEmbarque> getSalidasEmbarque(int localidad_origen){
-		return mainDao.getSalidasEmbarque(localidad_origen);
+	public List<DatoSalidasEmbarque> getSalidasEmbarque(int agenciaIdOrigen){
+		return mainDao.getSalidasEmbarque(agenciaIdOrigen);
 	}
 	
 	@Override

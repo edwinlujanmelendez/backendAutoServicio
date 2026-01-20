@@ -14,6 +14,8 @@ public class Pasajero implements Serializable{
 	private String apeMaterno;
 	private String fechanacimiento;
 	private String telefono;
+	private String c_email;
+	private int sexo_id;
 	private int flagWS;
 	
 	public Pasajero() {
@@ -59,6 +61,22 @@ public class Pasajero implements Serializable{
 		this.apeMaterno = apeMaterno;
 		this.fechanacimiento = fechanacimiento;
 		this.telefono = telefono;
+		this.flagWS = flagWS;
+	}
+	
+	public Pasajero(BigDecimal idpasajero, int idTipoDocumento, String numDocumento, String nombre, String apePaterno,
+			String apeMaterno, String fechanacimiento, String telefono, String c_email, int sexo_id, int flagWS) {
+		super();
+		this.idpasajero = idpasajero;
+		this.idTipoDocumento = idTipoDocumento;
+		this.numDocumento = numDocumento;
+		this.nombre = nombre;
+		this.apePaterno = apePaterno;
+		this.apeMaterno = apeMaterno;
+		this.fechanacimiento = fechanacimiento;
+		this.telefono = telefono;
+		this.c_email = c_email;
+		this.sexo_id = sexo_id;
 		this.flagWS = flagWS;
 	}
 
@@ -143,6 +161,22 @@ public class Pasajero implements Serializable{
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+	
+	public String getC_email() {
+		return c_email;
+	}
+
+	public void setC_email(String c_email) {
+		this.c_email = c_email;
+	}
+
+	public int getSexo_id() {
+		return sexo_id;
+	}
+
+	public void setSexo_id(int sexo_id) {
+		this.sexo_id = sexo_id;
 	}
 
 	@Override
